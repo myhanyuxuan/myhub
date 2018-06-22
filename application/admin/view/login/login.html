@@ -8,6 +8,7 @@
     <link href="index_public/css/layout.css" rel="stylesheet" type="text/css" />
     <link href="index_public/css/dialog.css" rel="stylesheet" type="text/css" />
     <script src="/static/bootstrap/js/jquery.js"></script>
+    <script src="/static/layout.js"></script>
 
     <link href="admin_public/css/login.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="admin_public/js/login.js"></script>
@@ -18,7 +19,7 @@
 <div class="ui-dialog">
     <div class="ui-dialog-title"><span>后台登录</span></div>
     <div class="ui-dialog-content">
-        <form method="POST" action="{:url('login/login')}">
+        <form id="changForm">
         <div class="tips-wrapper"></div>
         <div class="login-form"><div class="login-box">
             <div class="item item-fore1">
@@ -37,7 +38,7 @@
             </div>
             <div class="item item-fore15">
                 <div class="login-btn">
-                    <input type="submit" href="javascript:;" class="btn-img btn-entry" id="loginsubmit" style="outline: rgb(109, 109, 109) none 0px;" value="登&nbsp;&nbsp;&nbsp;&nbsp;录"/>
+                    <a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" style="outline: rgb(109, 109, 109) none 0px;">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
                 </div>
             </div>
             </div>
@@ -48,3 +49,14 @@
 </div>
 </body>
 </html>
+<script type="text/javascript">
+    $('#loginsubmit').click(function(){
+        var url = '/admin/login/login';
+        var param = $('#changForm').serialize();
+        $.post(url,{data:param},function(result){
+            if(result['error']){
+                hsDialog(result['error'],'');
+            }
+        });
+    });
+</script>

@@ -20,7 +20,7 @@ class Login extends Controller
     public function login(Request $request){
         if($request->post()){
                 if(!captcha_check($request->post('code'))){
-                   return json('验证码错误！');
+                   return json(['error'=>'验证码错误！']);
                 }
                 $model = new Admin;
                 $data = array();
@@ -29,10 +29,12 @@ class Login extends Controller
                 $data['admin_psd'] = md5($request->post('admin_psd'));
                 $r = $model->adminLogin($data);
                 if(!$r['error']){
-                    $this->success('登录成功！','index/index');
+                    return json(['success'=>'登录成功！']);
                 }else{
                     $this->error($r['error']);
+                    return json(['error'=>$r['error']]);
                 }
+
         }
             return $this ->fetch();
     }

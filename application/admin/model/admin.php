@@ -19,7 +19,7 @@ class Admin extends Model
         $result = $this->where($data)->find();
         if($result){
             if($result['is_use'] != 0){
-                $result['error'] = '该管理员已被禁用！';
+                $result['error'] = json(['error'=>'该管理员已被禁用！']);
                 return $result;
             }
             Session::set('admin_name',$result['admin_name']);
@@ -29,7 +29,7 @@ class Admin extends Model
             $updata['oldtime'] = time();
             $this->update($updata,array('id'=>$result['id']),'login_num,oldtime');
         }else{
-            $result['error'] = '用户名或密码错误！';
+            $result['error'] = json(['error'=>'用户名或密码错误！']);
         }
         return $result;
     }
