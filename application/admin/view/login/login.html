@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="index_public/css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="index_public/css/dialog.css" rel="stylesheet" type="text/css" />
+    <script src="/static/bootstrap/js/jquery.js"></script>
+
+    <link href="admin_public/css/login.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="admin_public/js/login.js"></script>
+</head>
+<body>
+<div id="login_bg"></div>
+<div class="ui-mask"></div>
+<div class="ui-dialog">
+    <div class="ui-dialog-title"><span>后台登录</span></div>
+    <div class="ui-dialog-content">
+        <form method="POST" action="{:url('login/login')}">
+        <div class="tips-wrapper"></div>
+        <div class="login-form"><div class="login-box">
+            <div class="item item-fore1">
+                <label for="loginname" class="login-label name-label"></label>
+                <input id="loginname" type="text" class="itxt" name="loginname" placeholder="用户名">
+            </div>
+            <div class="item item-fore1">
+                <label for="loginpsd" class="login-label name-label" style="background-position: -48px 0;"></label>
+                <input id="loginpsd" type="text" class="itxt" name="loginpsd" placeholder="密码">
+             </div>
+            <div class="item item-fore1" style="border: none;">
+                <div class="videll" style="position: relative;color: #666;">验证码：
+                    <input id="videll" type="text" class="itxt" name="code" placeholder="" style="width: 100px;padding-left: 10px;border: 1px solid #ececec;"/>
+                    {:captcha_img()}
+                </div>
+            </div>
+            <div class="item item-fore15">
+                <div class="login-btn">
+                    <input type="submit" href="javascript:;" class="btn-img btn-entry" id="loginsubmit" style="outline: rgb(109, 109, 109) none 0px;" value="登&nbsp;&nbsp;&nbsp;&nbsp;录"/>
+                </div>
+            </div>
+            </div>
+        </div>
+        </form>
+     </div>
+    <a class="ui-dialog-close"  href="javascript:void(0);" title="关闭"><span class="ui-icon ui-icon-delete"></span></a>
+</div>
+</body>
+</html>

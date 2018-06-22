@@ -1,0 +1,62 @@
+<link href="index_public/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="index_public/js/home_index.js"></script>
+{include file="layout_top"/}
+<nav class="public-nav-layout">
+    <div class="wrapper">
+        {include file="layout_cate"/}
+        <ul class="site-menu">
+            <li><a href="/" class="current">首页</a></li>
+            <li><a href="/list.html" >全部鲜花</a></li>
+            <li><a href="/zt/aiqing" target="_blank" >爱情鲜花</a></li>
+            <li><a href="/zt/sr" >生日鲜花</a></li>
+            <li><a href="/list-1102.html" >开业花篮</a></li>
+            <li><a href="/list-1180.html"  target="_blank" >生日蛋糕</a></li>
+            <li><a href="/zt/gaoduan"  target="_blank">高端鲜花</a></li>
+            <li><a href="/zt/tejia/" target="_blank">特价鲜花</a></li>
+            <li><a href="/zt/liping"  target="_blank" >礼品专区</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="home-focus-layout" style="max-width: 1926px;height: 380px;margin: 0 auto;">
+    <ul id="fullScreenSlides" class="full-screen-slides">
+        <li style="background: url(index_public/images/index/dv_wedding.jpg) center top / 1926px 380px no-repeat; z-index: 800; display: list-item;"><a href="" target="_blank">&nbsp;</a></li>
+        <li style="background: url(index_public/images/index/banner6.jpg) center top / 1926px 380px no-repeat; z-index: 800; display: list-item;"><a href="" target="_blank">&nbsp;</a></li>
+        <li style="background: url(index_public/images/index/banner1.jpg) center top / 1926px 380px no-repeat; z-index: 800; display: list-item;"><a href="" target="_blank">&nbsp;</a></li>
+        <li style="background: url(index_public/images/index/banner2.jpg) center top / 1926px 380px no-repeat; display: none; z-index: 900;"><a href="" target="_blank">&nbsp;</a></li>
+    </ul>
+</div>
+<div class="home-sale-layout wrapper">
+    <div class="left-layout">
+        <img src="index_public/images/h_brank.jpg" width="100%"/>
+        <ul class="qu_list">
+            <li>
+                <a href="/zt/aiqing" target="_blank">
+                    <div class="h_info"><p class="p1">爱情鲜花专区</p><p class="p2"><span>去看看</span></p></div>
+                    <div class="h_img"><img src="index_public/images/index/qu2.jpg" width="277" height="170"/></div>
+                </a>
+            </li>
+            <li>
+                <a href="/zt/sr" target="_blank">
+                    <div class="h_info"><p class="p1">生日鲜花专区</p><p class="p2"><span>去看看</span></p></div>
+                    <div class="h_img"><img src="index_public/images/index/qu1.jpg" width="277" height="170"/></div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--限时特惠-->
+<div id="limited_hot">
+
+</div>
+<!--限时特惠 end-->
+<div class="wrapper"><div class="mt20 home-adv-layout"><a href="" target="_blank"><img src="index_public/images/4001-151-557.jpg" class="call_mid_pic" /></a></div></div>
+<script type="text/javascript" src="static/bootstrap/js/jquery.lazyload.js"></script>
+<script>
+    $(function(){
+        $(".home-standard-layout .middle-goods-list dl dd.goods-thumb img,.home-standard-layout .left-ads img,.home-standard-layout .special_list li .goods-img img,.home-standard-layout .middle-goods-list2 li img,.home-adv-layout img").lazyload({threshold:200,effect : "fadeIn"});
+    });
+</script>
+{include file="cache/index_goods"}
+
+<div style="height: 80px;"></div>
+<!--StandardLayout End-->

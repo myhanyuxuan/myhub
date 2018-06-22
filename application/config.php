@@ -15,7 +15,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -136,6 +136,12 @@ return [
         'taglib_begin' => '{',
         // 标签库标签结束标记
         'taglib_end'   => '}',
+        //--------新增----------
+        'tpl_cache'          => false, // 是否开启模板编译缓存,设为false则每次都会重新编译
+        'tpl_replace_string' => [//自定义常量路径
+            'index_public' => '/static/index',
+            'admin_public' => '/static/admin'
+        ]
     ],
 
     // 视图输出字符串内容替换
