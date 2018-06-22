@@ -6,6 +6,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Request;
+use think\Session;
 
 class Common extends Controller{
     public function __construct(Request $request)
@@ -13,7 +14,7 @@ class Common extends Controller{
 
         parent::__construct($request);
         //判断是否登录
-        if(!$request->session('admin_name')){
+        if(!Session::get('admin_name')){
             $this->redirect('login/login');
         }
             $this->view->engine->layout('layout');
