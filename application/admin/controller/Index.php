@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-class Index extends Base
+class Index extends Common
 {
     /*首页*/
     public function index()
