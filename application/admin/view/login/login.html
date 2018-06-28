@@ -52,11 +52,19 @@
 <script type="text/javascript">
     $('#loginsubmit').click(function(){
         var url = '/admin/login/login';
-        var param = $('#changForm').serialize();
-        $.post(url,{data:param},function(result){
-            if(result['error']){
-                hsDialog(result['error'],'');
+        var params = $('#changForm').serializeArray();
+        var values = {};
+        for(var x in params ){
+            values[params[x].name] = params[x].value;
+        }
+        var idata = JSON.stringify(values);
+        $.post(url,{params:JSON.parse(idata)},function(result){
+            var r = eval('('+result+')');
+            if(!r['datas']['error']){
+                hsDialog(r['datas'],'reload','/admin/index/index');
+                return false;
             }
+            hsDialog(r['datas']['error'],'','');
         });
     });
 </script>

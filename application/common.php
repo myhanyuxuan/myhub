@@ -10,3 +10,15 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+function ajax_data($datas, $code = 200) {
+    $data = array();
+    $data['version'] ='1.0.0';
+    $data['code'] = $code;
+    $data['datas'] = $datas;
+    echo json_encode($data);die;
+}
+
+function ajax_error($message, $code = -200) {
+    $datas = array('error' => $message);
+    ajax_data($datas, $code);
+}
