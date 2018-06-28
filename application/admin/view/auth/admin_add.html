@@ -1,0 +1,42 @@
+<link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
+<form id="changeform" method="post" action="">
+    <input type="hidden" name="form_submit" value="ok" />
+    <div class="page ws_kehu">
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">用户名：</span>
+                <input type="text" name="admin_name"/>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">密码：</span>
+                <input type="text" name="admin_psd"/>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">确认密码：</span>
+                <input type="text" name="c_psd"/>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">权限组：</span>
+                <select name="group_id" style="width: 290px;">
+                    <option value="1">支付宝</option>
+                    <option value="2">微信</option>
+                    <option value="3">银行卡</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="footer">
+            <a href="JavaScript:void(0);" class="btn-adds6" id="confirm_button" ><span>确定</span></a>
+        </div>
+    </div>
+</form>

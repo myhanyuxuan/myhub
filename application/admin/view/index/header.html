@@ -8,14 +8,16 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="admin_public/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="/static/bootstrap/css/jquery.ui.css"  rel="stylesheet" />
     <link href="index_public/css/layout.css" rel="stylesheet" type="text/css" />
-    <link href="index_public/css/dialog.css" rel="stylesheet" type="text/css" />
     <link href="admin_public/css/base.css" rel="stylesheet" type="text/css" />
     <script src="/static/bootstrap/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/jquery.ui.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/member.js"></script>
     <script src="/static/layout.js"></script>
-
 </head>
 <body>
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
 <div id="header">
 
 </div>
@@ -84,7 +86,7 @@
 
         <li><a href="javascript:;" class="afinve"> <i class="icon_1"></i> <span class="nav-text">权限管理</span> <span class="arrow"></span> </a>
             <ul class="sub-menu">
-                <li><a href=""  class="afinve"><span>管理员</span></a></li>
+                <li><a href="{:url('auth/admin_list')}"  class="afinve"><span>管理员</span></a></li>
                 <li><a href=""><span>权限组</span></a></li>
             </ul>
         </li>

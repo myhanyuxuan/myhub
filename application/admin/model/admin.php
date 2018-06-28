@@ -36,6 +36,11 @@ class Admin extends Model
     }
     /*更新数据*/
     public function updata($data = [],$where = [],$field = []){
-        return $updata = $this->update($data,$where,$field);
+        return $this->update($data,$where,$field);
+    }
+    /*管理员列表*/
+    public function adminList($data = [],$field='*',$page=1)
+    {
+        return Db::table($this->table)->field($field)->where($data)->order('addtime desc')->paginate($page);
     }
 }

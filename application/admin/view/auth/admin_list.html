@@ -1,0 +1,88 @@
+<style>
+    select,input[type="text"]{padding: 4px;width: 100px;}
+    .buy_list tr th {border: 1px solid #b4b7bf;background-color: #e1e5ea;}
+</style>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+                <ul class="tab-base">
+                    <li><a href="http://stock.huashi.ren/admin/index.php?act=shop_sales&amp;op=sales" class="current"><span>全部</span></a></li>
+                    <li><a href="http://stock.huashi.ren/admin/index.php?act=shop_sales&amp;op=sales&amp;state_type=nosend"><span>未发货</span></a></li>
+                    <li><a href="http://stock.huashi.ren/admin/index.php?act=shop_sales&amp;op=sales&amp;state_type=send"><span>已发货</span></a></li>
+                    <li><a href="http://stock.huashi.ren/admin/index.php?act=shop_sales&amp;op=sales&amp;state_type=succ"><span>已完成</span></a></li>
+                    <li><a href="http://stock.huashi.ren/admin/index.php?act=shop_sales&amp;op=sales&amp;state_type=cancel"><span>已取消</span></a></li>
+                </ul>
+        </div>
+    </div>
+    <div class="fixed-empty"></div>
+    <div class="buy_search">
+        <div class="main tb-type1">
+            <span style="padding-right: 12px;">管理员列表：</span>
+            <a href="javascript:void(0);"  uri="{:url('auth/admin_add')}" class="btn-adds" nc_type="dialog" dialog_title="新增管理员" dialog_id="add_data" dialog_width="500">+新增</a>
+        </div>
+
+    </div>
+    <table class="table tb-type2 nobdb buy_list">
+        <thead>
+        <tr class="thead">
+            <th>登录名</th>
+            <th>上次登录</th>
+            <th>登录次数</th>
+            <th>权限组</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($admin_list){?>
+        <?php foreach($admin_list as $v){?>
+        <tr class="hover">
+            <td>{$v.admin_name}</td>
+            <td><?php echo date('Y-m-d H:i',$v['oldtime'])?></td>
+            <td>{$v.login_num}</td>
+            <td>{$v.group_id}</td>
+            <td>
+                <a href="javascript:void(0)" class="btn-adds6" nc_type="dialog" uri="{:url('index/index')}" dialog_title="管理员编辑" dialog_id="edit" dialog_width="500" >编辑</a>
+                <a href="javascript:void(0)" class="btn-adds3 clear_one" >删除</a>
+            </td>
+        </tr>
+        <?php }?>
+        <?php }else{?>
+        <tr class="no_data">
+            <td colspan="15">没有记录...</td>
+        </tr>
+        <?php }?>
+        </tbody>
+        <tfoot>
+        <tr class="tfoot">
+            <td colspan="15" id="dataFuncs"><div class="pagination"> {$admin_list->render()}</div></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script type="text/javascript" src="/static/bootstrap/js/zh-CN.js"></script>
+<script type="text/javascript" src="/static/bootstrap/js/dialog.js" id="dialog_js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#query_start_time').datepicker({dateFormat: 'yy-mm-dd'});
+        $('#query_end_time').datepicker({dateFormat: 'yy-mm-dd'});
+    });
+    $(function(){
+        $('.clear_one').click(function(){
+            var id = $(this).attr('ids');
+            showDialog('您确定要删除该数据？', 'confirm','','','','','','','','');
+            $('#fwin_dialog_submit').click(function() {
+                $.get('index.php?act=shop_fa&op=fa_del', {id: id}, function (data) {
+                    var $data = eval('('+data+')');
+                    if($data.state){
+                        showDialog($data.msg, 'succ', '', '', '', '', '', '', '', '', 2);
+                        window.location.reload();
+                    }else{
+                        showDialog($data.msg, 'error', '', '', '', '', '', '', '', '', 2);
+                    }
+                });
+            });
+
+        });
+    });
+</script>
