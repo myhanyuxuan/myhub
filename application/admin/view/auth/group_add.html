@@ -1,0 +1,86 @@
+<link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
+<style>
+    input[type='checkbox']{width: auto;vertical-align: middle;}
+    .label{padding-left: 0;padding-right: 0;cursor: pointer;}
+    .ws_kehu label span{text-align: left;vertical-align: middle;padding-left: 0;}
+</style>
+<form id="add_form" method="post" action="{:url('auth/group_add')}">
+    <div class="page ws_kehu">
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">权限组：</span>
+                <input type="text" name="gname"/>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label class="label"><input type="checkbox" id="limitAll" value="1"/><span class="in21" style="color: #2b72ca;">设置权限</span></label>
+            <?php foreach($group_all['left'] as $k=>$v){?>
+            <div style="padding: 4px 0;border-bottom: 1px solid #f2f2f2;padding-left: 30px;">
+                <label class="label"  for="limit<?php echo $k;?>"><input type="checkbox" id="limit<?php echo $k;?>"  onclick="selectLimit('limit<?php echo $k;?>')"/><span class="in21" style="color: #035461;">{$v.text}</span></label>
+                <?php foreach($v['list'] as $v1){?>
+                <label class="label"><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo explode(',',$v1['args'])[2];?>"/><span class="in21">{$v1.text}</span></label>
+                <?php }?>
+            </div>
+            <?php }?>
+        </div>
+
+        <div class="footer">
+            <a href="JavaScript:void(0);" class="btn-adds6" id="submitBtn" ><span>确定</span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function(){
+        //按钮先执行验证再提交表单
+        $("#submitBtn").click(function(){
+            if($("#add_form").valid()){
+                    var url = $('#add_form').attr('action');
+                    var params = $('#add_form').serializeArray();
+                    var values = {};
+                    for(var x in params ){
+                        values[params[x].name] = params[x].value;
+                    }
+                    var idata = JSON.stringify(values);
+                    $.post(url,{params:JSON.parse(idata)},function(result){
+                        var r = eval('('+result+')');
+                        if(!r['datas']['error']){
+                            console.log(r['datas']);
+                            showDialog(r['datas'], 'succ');
+                            //window.location.reload();
+                            return false;
+                        }
+                        showError(r['datas']['error']);
+                    });
+            }
+        });
+
+        $('#limitAll').click(function(){
+            $('input[type="checkbox"]').attr('checked',$(this).attr('checked') == 'checked');
+        });
+
+        $("#add_form").validate({
+            errorPlacement: function(error, element){
+                error.appendTo(element.parent().parent().prev().find('td:first'));
+            },
+            rules : {
+                gname : {
+                    required : true
+                }
+            },
+            messages : {
+                gname : {
+                    required : '权限名必填'
+                }
+            }
+        });
+    });
+    function selectLimit(name){
+        if($('#'+name).attr('checked')) {
+            $('.'+name).attr('checked',true);
+        }else {
+            $('.'+name).attr('checked',false);
+        }
+    }
+</script>

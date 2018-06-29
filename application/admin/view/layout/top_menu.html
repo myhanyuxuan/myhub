@@ -1,0 +1,9 @@
+<div class="fixed-bar">
+    <div class="item-title">
+        <ul class="tab-base">
+            <?php   foreach ($member_menu as $k => $v) {?>
+            <li><a href="{$v.menu_url}" <?php if($v['menu_key'] == $menu_key) {?>class="current"<?php }?>><span>{$v.menu_name}</span></a></li>
+            <?php }?>
+        </ul>
+    </div>
+</div>

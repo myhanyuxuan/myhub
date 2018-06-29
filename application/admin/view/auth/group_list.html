@@ -7,8 +7,8 @@
     <div class="fixed-empty"></div>
     <div class="buy_search">
         <div class="main tb-type1">
-            <span style="padding-right: 12px;">管理员列表：</span>
-            <a href="javascript:void(0);"  uri="{:url('auth/admin_add')}" class="btn-adds" nc_type="dialog" dialog_title="新增管理员" dialog_id="add_data" dialog_width="500">+新增</a>
+            <span style="padding-right: 12px;">权限组列表：</span>
+            <a href="javascript:void(0);"  uri="{:url('auth/group_add')}" class="btn-adds" nc_type="dialog" dialog_title="新增管理员" dialog_id="add_data" dialog_width="500">+新增</a>
         </div>
 
     </div>
@@ -23,8 +23,8 @@
         </tr>
         </thead>
         <tbody>
-        <?php if($admin_list){?>
-        <?php foreach($admin_list as $v){?>
+        <?php if($list){?>
+        <?php foreach($list as $v){?>
         <tr class="hover">
             <td>{$v.admin_name}</td>
             <td><?php echo date('Y-m-d H:i',$v['oldtime'])?></td>
@@ -42,10 +42,10 @@
         </tr>
         <?php }?>
         </tbody>
-        <?php if($admin_list){?>
+        <?php if($list){?>
         <tfoot>
         <tr class="tfoot">
-            <td colspan="15" id="dataFuncs"><div class="pagination"> {$admin_list->render()}</div></td>
+            <td colspan="15" id="dataFuncs"><div class="pagination"> {$list->render()}</div></td>
         </tr>
         </tfoot>
         <?php }?>
