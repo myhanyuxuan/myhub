@@ -10,17 +10,17 @@
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">权限组：</span>
-                <input type="text" name="gname"/>
+                <input type="text" id="gname" name="gname"/>
             </label>
         </div>
 
         <div class="s-type1">
-            <label class="label"><input type="checkbox" id="limitAll" value="1"/><span class="in21" style="color: #2b72ca;">设置权限</span></label>
+            <label class="label"><input type="checkbox" id="limitAll"/><span class="in21" style="color: #2b72ca;">设置权限</span></label>
             <?php foreach($group_all['left'] as $k=>$v){?>
             <div style="padding: 4px 0;border-bottom: 1px solid #f2f2f2;padding-left: 30px;">
-                <label class="label"  for="limit<?php echo $k;?>"><input type="checkbox" id="limit<?php echo $k;?>"  onclick="selectLimit('limit<?php echo $k;?>')"/><span class="in21" style="color: #035461;">{$v.text}</span></label>
+                <label class="label"  for="limit<?php echo $k;?>"><input type="checkbox" id="limit<?php echo $k;?>" value="" onclick="selectLimit('limit<?php echo $k;?>')"/><span class="in21" style="color: #035461;">{$v.text}</span></label>
                 <?php foreach($v['list'] as $v1){?>
-                <label class="label"><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo explode(',',$v1['args'])[2];?>"/><span class="in21">{$v1.text}</span></label>
+                <label class="label"><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo $v['nav'];?>:<?php echo explode(',',$v1['args'])[2];?>"/><span class="in21">{$v1.text}</span></label>
                 <?php }?>
             </div>
             <?php }?>
@@ -37,18 +37,20 @@
         $("#submitBtn").click(function(){
             if($("#add_form").valid()){
                     var url = $('#add_form').attr('action');
-                    var params = $('#add_form').serializeArray();
+                    var gname = $('input[name="gname"]').val();
+
                     var values = {};
-                    for(var x in params ){
-                        values[params[x].name] = params[x].value;
-                    }
-                    var idata = JSON.stringify(values);
-                    $.post(url,{params:JSON.parse(idata)},function(result){
+
+                    $.each($('input[name="permission[]"]'),function(index){
+                        if(this.checked){
+                           values[index] = $(this).val();
+                        }
+                    });
+                    $.post(url,{gname:gname,permission:values},function(result){
                         var r = eval('('+result+')');
                         if(!r['datas']['error']){
-                            console.log(r['datas']);
-                            showDialog(r['datas'], 'succ');
-                            //window.location.reload();
+                            showDialog(r['datas'],'succ','','','','','','','','',1);
+                            window.location.reload();
                             return false;
                         }
                         showError(r['datas']['error']);
@@ -57,7 +59,7 @@
         });
 
         $('#limitAll').click(function(){
-            $('input[type="checkbox"]').attr('checked',$(this).attr('checked') == 'checked');
+            $('input[name="permission[]"]').attr('checked',$(this).attr('checked') == 'checked');
         });
 
         $("#add_form").validate({
@@ -66,7 +68,16 @@
             },
             rules : {
                 gname : {
-                    required : true
+                    required : true,
+                    remote	: {
+                        url :'/admin/auth/check_gname',
+                        type:'get',
+                        data:{
+                            gname : function(){
+                                return $('#gname').val();
+                            }
+                        }
+                    }
                 }
             },
             messages : {

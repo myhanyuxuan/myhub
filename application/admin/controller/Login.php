@@ -43,6 +43,7 @@ class Login extends Controller
             // 验证失败 输出错误信息
             ajax_error($check);
         }
+
         if(!captcha_check($params['code'])){
             ajax_error('验证码错误！');
         }

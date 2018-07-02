@@ -39,7 +39,7 @@ class Admin extends Model
         return $this->update($data,$where,$field);
     }
     /*管理员列表*/
-    public function adminList($data = [],$field='*',$page=1)
+    public function adminList($data = [],$field='*',$page=8)
     {
         return Db::table($this->table)->field($field)->where($data)->order('addtime desc')->paginate($page);
     }

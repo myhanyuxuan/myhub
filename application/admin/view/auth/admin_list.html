@@ -23,26 +23,30 @@
         </tr>
         </thead>
         <tbody>
-        <?php if($admin_list){?>
+        <?php if(!$admin_list->isEmpty()){?>
         <?php foreach($admin_list as $v){?>
         <tr class="hover">
             <td>{$v.admin_name}</td>
             <td><?php echo date('Y-m-d H:i',$v['oldtime'])?></td>
             <td>{$v.login_num}</td>
-            <td>{$v.group_id}</td>
+            <td>{$v.group_id==0?'超管':$v.group_id}</td>
             <td>
+                <?php if($v['group_id']==0){?>
+                超级管理员不可编辑
+                <?php }else{?>
                 <a href="javascript:void(0)" class="btn-adds6" nc_type="dialog" uri="{:url('index/index')}" dialog_title="管理员编辑" dialog_id="edit" dialog_width="500" >编辑</a>
                 <a href="javascript:void(0)" class="btn-adds3 clear_one" >删除</a>
+                <?php }?>
             </td>
         </tr>
         <?php }?>
         <?php }else{?>
         <tr class="no_data">
-            <td colspan="15">没有记录...</td>
+            <td colspan="15">暂无记录...</td>
         </tr>
         <?php }?>
         </tbody>
-        <?php if($admin_list){?>
+        <?php if($admin_list->render()){?>
         <tfoot>
         <tr class="tfoot">
             <td colspan="15" id="dataFuncs"><div class="pagination"> {$admin_list->render()}</div></td>
