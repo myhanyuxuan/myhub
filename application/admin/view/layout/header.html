@@ -5,6 +5,7 @@
     <title>myhub</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="admin_public/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -19,7 +20,12 @@
 <body>
 <div id="append_parent"></div><div id="ajaxwaitid"></div>
 <div id="header">
-
+<div class="right">
+    <ul>
+        <li class="name">{$gadminInfo.gname}：{$Think.cookie.admin_name}</li>
+        <li><a class="btn-adds3" href="{:url('login/outlogin')}">【退出】</a></li>
+    </ul>
+</div>
 </div>
 
 <div id="left">

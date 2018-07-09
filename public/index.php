@@ -17,5 +17,7 @@ define('APP_PATH', __DIR__ . '/../application/');
 define('RUNTIME', __DIR__ . '/../runtime/');
 //定义md5_key
 define('MD5_KEY','myhub_3073598');
+//第三方类库
+define('EXTEND','../extend/');
 // 加载框架引导文件
 require __DIR__ . '/../thinkphp/start.php';

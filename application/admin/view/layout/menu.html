@@ -4,11 +4,13 @@
 <ul id="menu_left" class="navMenu">
     <li class="frist2" onclick="window.location.href='/admin/index/index?index=ok'">控制台</li>
     <?php foreach($getNav['left'] as $k=>$v){?>
-    <li <?php if($ls_con==$v['nav']){?>class="open"<?php }?>><a href="javascript:;" onclick="surl($(this));" ls_con="{$v.nav}" ls_fun="<?php echo explode(',',$v['list'][0]['args'])[2]?>" class="afinve <?php if($ls_con==$v['nav']){?>active<?php }?>"><i class="icon_1"></i><span class="nav-text">{$v.text}</span><span class="arrow <?php if($ls_con==$v['nav']){?>open<?php }?>"></span></a>
+    <li <?php if($ls_con==$v['nav']){?>class="open"<?php }?>><a href="javascript:;"  onclick="surl($(this));" ls_con="{$v.nav}" ls_fun="{$v.action}" class="afinve <?php if($ls_con==$v['nav']){?>active<?php }?>"><i class="icon_1"></i><span class="nav-text">{$v.text}</span><span class="arrow <?php if($ls_con==$v['nav']){?>open<?php }?>"></span></a>
     <ul class="sub-menu" <?php if($ls_con==$v['nav']){?>style="display: block;"<?php }?>>
     <?php foreach($v['list'] as $k1=>$v1){?>
+    <?php if($v1['is_fun'] == 1){?>
     <?php $v_args=explode(',',$v1['args'])?>
     <li <?php if($ls_con==$v['nav'] && in_array($ls_fun,$v_args)){?>class="open"<?php }?>><a href="javascript:;" onclick="surl($(this));" ls_con="{$v_args[1]}" ls_fun="{$v_args[2]}" <?php if($ls_con==$v['nav'] && in_array($ls_fun,$v_args)){?>class="active"<?php }?>><span>{$v1.text}</span></a></li>
+    <?php }?>
     <?php }?>
 </ul>
 </li>

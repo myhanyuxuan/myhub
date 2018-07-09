@@ -62,6 +62,8 @@ class Login extends Controller
         if(Cookie::get('admin_name')){
             Cookie::delete('admin_name');
         }
+        Cookie::delete('last_url');
+        Cookie::delete('is_con');
         $this->success('请登录！','login/login','',1);
     }
 }

@@ -15,27 +15,27 @@
     <table class="table tb-type2 nobdb buy_list">
         <thead>
         <tr class="thead">
-            <th>登录名</th>
+            <th width="150">登录名</th>
             <th>上次登录</th>
-            <th>登录次数</th>
-            <th>权限组</th>
-            <th>操作</th>
+            <th width="80">登录次数</th>
+            <th width="150">权限组</th>
+            <th width="300">操作</th>
         </tr>
         </thead>
         <tbody>
-        <?php if(!$admin_list->isEmpty()){?>
+        <?php if(!empty($admin_list)){?>
         <?php foreach($admin_list as $v){?>
         <tr class="hover">
             <td>{$v.admin_name}</td>
-            <td><?php echo date('Y-m-d H:i',$v['oldtime'])?></td>
+            <td><?php echo $v['oldtime']?date('Y-m-d H:i',$v['oldtime']):'该管理员未登录过'?></td>
             <td>{$v.login_num}</td>
-            <td>{$v.group_id==0?'超管':$v.group_id}</td>
+            <td><?php echo $v['group_name']?$v['group_name']:'---';?></td>
             <td>
                 <?php if($v['group_id']==0){?>
                 超级管理员不可编辑
                 <?php }else{?>
-                <a href="javascript:void(0)" class="btn-adds6" nc_type="dialog" uri="{:url('index/index')}" dialog_title="管理员编辑" dialog_id="edit" dialog_width="500" >编辑</a>
-                <a href="javascript:void(0)" class="btn-adds3 clear_one" >删除</a>
+                <a href="javascript:;" class="btn-adds6" nc_type="dialog"  uri="{:url('auth/admin_edit',['id'=>$v['id']])}" dialog_title="编辑管理员" dialog_id="edit_data" dialog_width="500">编辑</a>
+                <a href="javascript:;" class="btn-adds3"  onclick="dels($(this),1,'/admin/auth/admin_list')" ids="{$v.id}">删除</a>
                 <?php }?>
             </td>
         </tr>
@@ -46,39 +46,13 @@
         </tr>
         <?php }?>
         </tbody>
-        <?php if($admin_list->render()){?>
+        <?php if($show_pages){?>
         <tfoot>
         <tr class="tfoot">
-            <td colspan="15" id="dataFuncs"><div class="pagination"> {$admin_list->render()}</div></td>
+            <td colspan="15" id="dataFuncs"><div class="pagination"> {$show_pages}</div></td>
         </tr>
         </tfoot>
         <?php }?>
     </table>
 </div>
-
-<script type="text/javascript" src="/static/bootstrap/js/zh-CN.js"></script>
 <script type="text/javascript" src="/static/bootstrap/js/dialog.js" id="dialog_js" charset="utf-8"></script>
-<script type="text/javascript">
-    $(function(){
-        $('#query_start_time').datepicker({dateFormat: 'yy-mm-dd'});
-        $('#query_end_time').datepicker({dateFormat: 'yy-mm-dd'});
-    });
-    $(function(){
-        $('.clear_one').click(function(){
-            var id = $(this).attr('ids');
-            showDialog('您确定要删除该数据？', 'confirm','','','','','','','','');
-            $('#fwin_dialog_submit').click(function() {
-                $.get('index.php?act=shop_fa&op=fa_del', {id: id}, function (data) {
-                    var $data = eval('('+data+')');
-                    if($data.state){
-                        showDialog($data.msg, 'succ', '', '', '', '', '', '', '', '', 2);
-                        window.location.reload();
-                    }else{
-                        showDialog($data.msg, 'error', '', '', '', '', '', '', '', '', 2);
-                    }
-                });
-            });
-
-        });
-    });
-</script>

@@ -41,6 +41,10 @@ class Admin extends Model
     /*管理员列表*/
     public function adminList($data = [],$field='*',$page=8)
     {
-        return Db::table($this->table)->field($field)->where($data)->order('addtime desc')->paginate($page);
+        return Db::table($this->table)->field($field)->where($data)->paginate($page);
+    }
+    /*管理员详情*/
+    public function adminInfo($data = [],$field = '*'){
+        return $this->field($field)->where($data)->find();
     }
 }

@@ -1,25 +1,25 @@
 <link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
-<form id="changeform" method="post" action="{:url('auth/admin_add')}">
+<form id="changeform" method="post" action="{:url('auth/admin_edit')}">
+    <input type="hidden" name="admin_id" value="{$admin_info.id}"/>
     <div class="page ws_kehu">
-
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">用户名：</span>
-                <input type="text" name="admin_name" id="admin_name"/>
+                <span style="text-align: center;background: #f1f1f1;">{$admin_info.admin_name}</span>
             </label>
         </div>
 
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">密码：</span>
-                <input type="text" name="password" id="password"/>
+                <input type="text" name="password" id="password" value="" placeholder="为空表示不修改密码"/>
             </label>
         </div>
 
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">确认密码：</span>
-                <input type="text" name="password_confirm" id="password_confirm"/>
+                <input type="text" name="password_confirm" id="password_confirm" value=""/>
             </label>
         </div>
 
@@ -29,7 +29,7 @@
                 <select name="gid" style="width: 290px;">
                     <option value="">选择权限组</option>
                     <?php foreach($group_list as $v){?>
-                    <option value="{$v.id}">{$v.gname}</option>
+                    <option value="{$v.id}" <?php if($admin_info['group_id']==$v['id']){?>selected<?php }?>>{$v.gname}</option>
                     <?php }?>
                 </select>
             </label>
@@ -44,23 +44,13 @@
     $(document).ready(function(){
         //按钮先执行验证再提交表单
         $("#confirm_button").click(function(){
-            if($("#changeform").valid()){
-                var url = $('#changeform').attr('action');
-                var params = $('#changeform').serializeArray();
-                var values = {};
-                for(var x in params ){
-                    values[params[x].name] = params[x].value;
+            var psd = $('#password').val();
+            if(psd == ''){
+                submits();
+            }else{
+                if($("#changeform").valid()){
+                    submits();
                 }
-                var idata = JSON.stringify(values);
-                $.post(url,{params:JSON.parse(idata)},function(result){
-                    var r = eval('('+result+')');
-                    if(!r['datas']['error']){
-                        showDialog(r['datas'],'succ','','','','','','','','',1);
-                        window.location.reload();
-                        return false;
-                    }
-                    showError(r['datas']['error']);
-                });
             }
         });
 
@@ -92,4 +82,22 @@
             }
         });
     });
+    function submits(){
+        var url = $('#changeform').attr('action');
+        var params = $('#changeform').serializeArray();
+        var values = {};
+        for(var x in params ){
+            values[params[x].name] = params[x].value;
+        }
+        var idata = JSON.stringify(values);
+        $.post(url,{params:JSON.parse(idata)},function(result){
+            var r = eval('('+result+')');
+            if(!r['datas']['error']){
+                showDialog(r['datas'],'succ','','','','','','','','',1);
+                window.location.reload();
+                return false;
+            }
+            showError(r['datas']['error']);
+        });
+    }
 </script>

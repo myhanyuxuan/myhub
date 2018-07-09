@@ -4,13 +4,13 @@
     .label{padding-left: 0;padding-right: 0;cursor: pointer;}
     .ws_kehu label span{text-align: left;vertical-align: middle;padding-left: 0;}
 </style>
-<form id="add_form" method="post" action="{:url('auth/group_add')}">
+<form id="add_form" method="post" action="{:url('auth/group_edit')}">
+    <input type="hidden" name="group_id" id="group_id" value="{$group_info.id}" />
     <div class="page ws_kehu">
-
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">权限组：</span>
-                <input type="text" id="gname" name="gname"/>
+                <input type="text" id="gname" name="gname" value="{$group_info.gname}"/>
             </label>
         </div>
 
@@ -20,7 +20,7 @@
             <div style="padding: 4px 0;border-bottom: 1px solid #f2f2f2;padding-left: 30px;">
                 <label class="label"  for="limit<?php echo $k;?>"><input type="checkbox" id="limit<?php echo $k;?>"  name="permission[]" value="no" onclick="selectLimit('limit<?php echo $k;?>')"/><span class="in21" style="color: #035461;">{$v.text}</span></label>
                 <?php foreach($v['list'] as $v1){?>
-                <label class="label"><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo $v['nav'];?>:<?php echo explode(',',$v1['args'])[2];?>"/><span class="in21">{$v1.text}</span></label>
+                <label class="label"><input nctype='limit' class="limit<?php echo $k;?>" type="checkbox" name="permission[]" value="<?php echo $v['nav'];?>:<?php echo explode(',',$v1['args'])[2];?>" <?php if(in_array($v['nav'].':'.explode(',',$v1['args'])[2],$group_info['limits'])){ echo "checked=\"checked\""; }?>/><span class="in21">{$v1.text}</span></label>
                 <?php }?>
             </div>
             <?php }?>
@@ -38,6 +38,7 @@
             if($("#add_form").valid()){
                     var url = $('#add_form').attr('action');
                     var gname = $('input[name="gname"]').val();
+                    var group_id = $('input[name="group_id"]').val();
 
                     var values = {};
                     var valp = false;
@@ -50,7 +51,7 @@
                     if(valp == false){
                         values = '';
                     }
-                    $.post(url,{gname:gname,permission:values},function(result){
+                    $.post(url,{group_id:group_id,gname:gname,permission:values},function(result){
                         var r = eval('('+result+')');
                         if(!r['datas']['error']){
                             showDialog(r['datas'],'succ','','','','','','','','',1);
@@ -78,7 +79,10 @@
                         type:'get',
                         data:{
                             type:function(){
-                                return 'check_add';
+                                return 'check_edit';
+                            },
+                            gid : function(){
+                                return $('#group_id').val();
                             },
                             gname : function(){
                                 return $('#gname').val();

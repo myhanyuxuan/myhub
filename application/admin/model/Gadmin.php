@@ -16,9 +16,13 @@ class Gadmin extends Model
     public function updata($data = [],$where = [],$field = []){
         return $this->update($data,$where,$field);
     }
-    /*管理员列表*/
+    /*权限组列表*/
     public function groupList($data = [],$field='*',$page=8)
     {
         return Db::table($this->table)->field($field)->where($data)->order('addtime desc')->paginate($page);
+    }
+    /*权限组详情*/
+    public function groupInfo($data = [],$field = '*'){
+        return $this->field($field)->where($data)->find();
     }
 }
