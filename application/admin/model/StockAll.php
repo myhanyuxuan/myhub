@@ -14,10 +14,10 @@ class StockAll extends Model
     static $cache_spec = 'data_spec_list';//产品规格缓存标识
     static $cache_cate = 'data_cate_list';//产品大类缓存标识
     protected $table = 'myhub_stock_sales';
-    protected $table_data_product = 'myhub_stock_data_product';
-    protected $table_data_com = 'myhub_stock_data_com';
-    protected $table_data_spec = 'myhub_stock_data_spec';
-    protected $table_data_cate = 'myhub_stock_data_cate';
+    protected $table_data_product = 'myhub_stock_data';
+    protected $table_data_com = 'myhub_stock_unit';
+    protected $table_data_spec = 'myhub_stock_spec';
+    protected $table_data_cate = 'myhub_stock_class';
 
     public function _dcache_com(){
         Cache::rm(self::$cache_com);
@@ -102,7 +102,7 @@ class StockAll extends Model
     }
     public function stockDataList($data = [],$field='*',$page=8)
     {
-        return Db::table($this->table_data_product)->field($field)->where($data)->order('addtime desc')->paginate($page);
+        return Db::table($this->table_data_product)->field($field)->where($data)->order('id desc')->paginate($page);
     }
     //计量单位详情
     public function infoAttr($where = []){

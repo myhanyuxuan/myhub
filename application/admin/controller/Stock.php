@@ -5,6 +5,8 @@
 namespace app\admin\controller;
 
 use app\admin\model\StockAll;
+use app\admin\model\StockSpec;
+use app\admin\model\StockUnit;
 use think\Cookie;
 use think\Db;
 use think\image\Exception;
@@ -13,12 +15,16 @@ use think\Request;
 class Stock extends Common
 {
     static $data;
-    protected $stock;
+    //计量单位
+    protected $stockUnit;
+    //产品规格
+    protected $stockSpec;
 
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->stock = new StockAll();
+        $this->stockSpec = new StockSpec();
+        $this->stockUnit = new StockUnit();
     }
     /*=============================================================销售管理================================================================*/
     public function sales_list(Request $request)
@@ -41,44 +47,24 @@ class Stock extends Common
         $this -> top_menu('stock');
         return $this ->fetch();
     }
-    /*=============================================================数据管理->产品资料================================================================*/
+    /*=============================================================数据管理================================================================*/
+    //产品资料
     public function data_list(Request $request)
     {
         $this -> top_menu('data');
-        if($request->param('type')){
-            $type = $request->param('type');
-            switch($type){
-                case 'kehu':
-                    self::kehu_list();
-                    return $this ->fetch('stock/data/kehu/kehu_list');
-                    break;
-                case 'supplier':
-                    self::supplier_list();
-                    return $this ->fetch('stock/data/supplier/supplier_list');
-                    break;
-                case 'attr':
-                    if($request->param('spec') == 1){
-                        $this->assign('specList',self::spec_list());
-                        $this->specDelete($request->get('ids/a'));//批量删除
-                        return $this ->fetch('stock/data/attr/spec_list');
-                    }
-
-                    $this->assign('comList',self::attr_list());
-                    $this->attrDelete($request->get('ids/a'));//批量删除
-                    return $this ->fetch('stock/data/attr/attr_list');
-                    break;
-            }
+        if($request->param('type')){//客户资料，供货商资料，产品属性
+           $fetch = $this->other_data($request->param('type'));
+           return $this ->fetch($fetch);
         }
 
+        //产品资料
         $cate_name = $spec_name = $com_name = $cap_name = '';
         $dataList = self::dataList();
         $cate_list = self::cate_list();
         $spec_list = self::spec_list();
         $attr_list = self::attr_list();
-
         $show_pages = $dataList->render();
         $dataList = $dataList->all();
-
         foreach($dataList as $k=>$v){
             foreach($cate_list as $v1){
                 if($v['cate_id'] == $v1['id']){
@@ -107,8 +93,47 @@ class Stock extends Common
         $this->assign('dataList',$dataList);
         $this->assign('show_pages',$show_pages);
         $this->dataDelete($request->get('ids/a'));//批量删除
+
         return $this ->fetch('stock/data/data_list');
     }
+
+    public function other_data($type){
+        switch($type){
+            case 'kehu'://客户资料
+                self::kehu_list();
+                return $this ->fetch('stock/data/kehu/kehu_list');
+                break;
+            case 'supplier'://供货商资料
+                self::supplier_list();
+                return $this ->fetch('stock/data/supplier/supplier_list');
+                break;
+            case 'attr'://产品属性设置
+                if($this->request->param('spec') == 1){//规格
+                    $list = $this->stockSpec->listData();
+                    $this->assign('list',$list);
+                    //批量删除
+                    if($this->request->get('ids/a')){
+                        $this->stockSpec->deleteData($this->request->get('ids/a'));
+                        ajax_data('删除成功');
+                    }
+                    $url = 'stock/spec_list';
+                    return $url;
+                }
+
+                //计量单位
+                $list = $this->stockUnit->listData();
+                $this->assign('list',$list);
+                //批量删除
+                if($this->request->get('ids/a')){
+                    $this->stockUnit->deleteData($this->request->get('ids/a'));
+                    ajax_data('删除成功');
+                }
+                $url = 'stock/unit_list';
+                break;
+        }
+        return $url;
+    }
+
     public function data_add(Request $request){
 
         $this->view->engine->layout(false);
@@ -120,6 +145,7 @@ class Stock extends Common
         $this->assign('attrList',self::attr_list());
         return $this ->fetch('stock/data/data_add');
     }
+
     public function data_edit(Request $request){
         $info = $this->stock->infoData(array('id'=>$request->param('id')));
         $this->assign('info',$info);
@@ -137,52 +163,61 @@ class Stock extends Common
         $this->assign('attrList',self::attr_list());
         return $this ->fetch('stock/data/data_edit');
     }
+
     public function data_cate_list(){
         $this->view->engine->layout(false);
         $this->assign('cateList',self::cate_list());
         return $this ->fetch('stock/data/cate_list');
     }
+
     public function data_cate_edit(Request $request){
         $this->view->engine->layout(false);
         $this->dataCateSS($request->post('del_data'),$request->post('new_id/a'),$request->post('c_id/a'));
         return $this ->fetch('stock/data/cate_list');
     }
-    /*=============================================================数据管理->产品属性================================================================*/
-    public function attr_add(Request $request){
 
+    //计量单位新增
+    public function unit_add(Request $request){
         $this->view->engine->layout(false);
-
-        $this->attrAdd($request->post('params/a'));//添加
-
-        return $this ->fetch('stock/data/attr/attr_add');
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockUnit->insertData($data);
+        }
+        return $this ->fetch();
     }
+
+    //计量单位编辑
+    public function unit_edit(Request $request){
+        $this->view->engine->layout(false);
+        $info = $this->stockUnit->infoData(array('id'=>$request->param('id')));
+        $this->assign('info',$info);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockUnit->updataData($data);
+        }
+        return $this ->fetch();
+    }
+
+    //产品规格新增
     public function spec_add(Request $request){
-
         $this->view->engine->layout(false);
-
-        $this->specAdd($request->post('params/a'));//添加
-
-        return $this ->fetch('stock/data/attr/spec_add');
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockSpec->insertData($data);
+        }
+        return $this ->fetch();
     }
-    public function attr_edit(Request $request){
 
-        $info = $this->stock->infoAttr(array('id'=>$request->param('id')));
-        $this->assign('info',$info);
-        $this->view->engine->layout(false);
-
-        $this->attrEdit($request->post('params/a'));//编辑
-
-        return $this ->fetch('stock/data/attr/attr_edit');
-    }
+    //产品规格编辑
     public function spec_edit(Request $request){
-
-        $info = $this->stock->infoSpec(array('id'=>$request->param('id')));
-        $this->assign('info',$info);
         $this->view->engine->layout(false);
-
-        $this->specEdit($request->post('params/a'));//编辑
-
-        return $this ->fetch('stock/data/attr/spec_edit');
+        $info = $this->stockSpec->infoData(array('id'=>$request->param('id')));
+        $this->assign('info',$info);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockSpec->updataData($data);
+        }
+        return $this ->fetch();
     }
     /*=============================================================attr================================================================*/
     private function dataCateSS($del_data,$new_id,$c_id){
@@ -248,29 +283,6 @@ class Stock extends Common
             }catch(Exception $e){
                 ajax_error($e->getMessage());
             }
-    }
-    private function attrAdd($post){
-        if(!empty($post)){
-            try{
-                if(empty($post['com_name'])){
-                   throw new Exception('单位名称不能为空');
-                }
-                $check_name = $this->stock->infoAttr(array('com_name'=>$post['com_name']));
-                if(!empty($check_name)){
-                    throw new Exception('该单位名称已存在');
-                }
-                $data = array();
-                $data['com_name'] = $post['com_name'];
-                $data['cap_name'] = $post['cap_name'];
-                $result = $this->stock->insertAttr($data);
-                if(!$result){
-                    throw new Exception('操作失败');
-                }
-                ajax_data('操作成功');
-            }catch(Exception $e){
-              ajax_error($e->getMessage());
-            }
-        }
     }
     private function dataAdd($post){
         if(!empty($post)){
@@ -349,95 +361,6 @@ class Stock extends Common
     private function dataDelete($ids){
         if($ids){
             $this->stock->deleteData($ids);
-            ajax_data('删除成功');
-        }
-    }
-    private function specAdd($post){
-        if(!empty($post)){
-            try{
-                if(empty($post['spec_name'])){
-                    throw new Exception('规格名称不能为空');
-                }
-                $check_name = $this->stock->infoSpec(array('spec_name'=>$post['spec_name']));
-                if(!empty($check_name)){
-                    throw new Exception('该规格名称已存在');
-                }
-                $data = array();
-                $data['spec_name'] = $post['spec_name'];
-                $result = $this->stock->insertSpec($data);
-                if(!$result){
-                    throw new Exception('操作失败');
-                }
-                ajax_data('操作成功');
-            }catch(Exception $e){
-                ajax_error($e->getMessage());
-            }
-        }
-    }
-    private function attrEdit($post){
-        if(!empty($post)){
-            try{
-                if(empty($post['com_name'])){
-                    throw new Exception('单位名称不能为空');
-                }
-                $where = array();
-                if (is_numeric($post['id'])){
-                    $where['id'] = array('neq',intval($post['id']));
-                }
-                $where['com_name'] = $post['com_name'];
-                $check_name = $this->stock->infoAttr($where);
-                if(!empty($check_name)){
-                    throw new Exception('该单位名称已存在');
-                }
-                $data = array();
-                $data['com_name'] = $post['com_name'];
-                $data['cap_name'] = $post['cap_name'];
-                $result = $this->stock->updataAttr($data,array('id'=>$post['id']));
-                if(!$result){
-                    throw new Exception('操作失败');
-                }
-                ajax_data('操作成功');
-            }catch(Exception $e){
-                ajax_error($e->getMessage());
-            }
-        }
-    }
-    private function specEdit($post){
-        if(!empty($post)){
-            try{
-                if(empty($post['spec_name'])){
-                    throw new Exception('规格名称不能为空');
-                }
-                $where = array();
-                if (is_numeric($post['id'])){
-                    $where['id'] = array('neq',intval($post['id']));
-                }
-                $where['spec_name'] = $post['spec_name'];
-                $check_name = $this->stock->infoSpec($where);
-                if(!empty($check_name)){
-                    throw new Exception('该规格名称已存在');
-                }
-                $data = array();
-                $data['spec_name'] = $post['spec_name'];
-                $result = $this->stock->updataSpec($data,array('id'=>$post['id']));
-                if(!$result){
-                    throw new Exception('操作失败');
-                }
-                ajax_data('操作成功');
-            }catch(Exception $e){
-                ajax_error($e->getMessage());
-            }
-        }
-    }
-    private function attrDelete($ids){
-        if($ids){
-            $this->stock->deleteAttr($ids);
-            ajax_data('删除成功');
-        }
-    }
-    private function specDelete($ids){
-        if($ids){
-            $this->stock->deleteSpec($ids);
             ajax_data('删除成功');
         }
     }
