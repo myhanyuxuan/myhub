@@ -1,0 +1,70 @@
+<link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
+<form id="changeform" method="post" action="{:url('stock/data_edit')}">
+    <input type="hidden" name="id" value="{$info.id}"/>
+    <div class="page ws_kehu">
+
+        <div class="s-type1">
+            <label>
+                <span class="in21">产品大类：</span>
+                <span style="color: red;">{$cate_name}</span>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">产品名称：</span>
+                <input type="text" name="p_name" id="p_name" value="{$info.p_name}"/>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">产品规格：</span>
+                <select name="spec_id" style="width: 290px;">
+                    <?php foreach($specList as $v){?>
+                    <option value="{$v.id}" <?php if($info['spec_id']==$v['id']){?>selected<?php }?>>{$v.spec_name}</option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">计量单位：</span>
+                <select name="com_id" style="width: 290px;">
+                    <?php foreach($attrList as $v){?>
+                    <option value="{$v.id}" <?php if($info['com_id']==$v['id']){?>selected<?php }?>>{$v.com_name}</option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+
+
+        <div class="footer">
+            <a href="JavaScript:void(0);" class="btn-adds6" id="confirm_button" ><span>确定</span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function(){
+        //按钮先执行验证再提交表单
+        $("#confirm_button").click(function(){
+                var url = $('#changeform').attr('action');
+                var params = $('#changeform').serializeArray();
+                var values = {};
+                for(var x in params ){
+                    values[params[x].name] = params[x].value;
+                }
+                var idata = JSON.stringify(values);
+                $.post(url,{params:JSON.parse(idata)},function(result){
+                    var r = eval('('+result+')');
+                    if(!r['datas']['error']){
+                        showDialog(r['datas'],'succ','','','','','','','','',1);
+                        window.location.reload();
+                        return false;
+                    }
+                    showError(r['datas']['error']);
+                });
+        });
+    });
+</script>

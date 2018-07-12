@@ -1,0 +1,45 @@
+<link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
+<style>
+    input[type='checkbox']{width: auto;vertical-align: middle;}
+    .label{padding-left: 0;padding-right: 0;cursor: pointer;}
+    .ws_kehu label span{text-align: left;vertical-align: middle;padding-left: 0;}
+</style>
+<form id="changeform" method="post" action="{:url('stock/spec_edit')}">
+    <input type="hidden" name="id" value="{$info.id}"/>
+    <div class="page ws_kehu">
+
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">规格名称：</span>
+                <input type="text" id="com_name" name="spec_name" value="{$info.spec_name}"/>
+            </label>
+        </div>
+
+        <div class="footer">
+            <a href="JavaScript:void(0);" class="btn-adds6" id="confirm_button" ><span>确定</span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function(){
+        //按钮先执行验证再提交表单
+        $("#confirm_button").click(function(){
+                var url = $('#changeform').attr('action');
+                var params = $('#changeform').serializeArray();
+                var values = {};
+                for(var x in params ){
+                    values[params[x].name] = params[x].value;
+                }
+                var idata = JSON.stringify(values);
+                $.post(url,{params:JSON.parse(idata)},function(result){
+                    var r = eval('('+result+')');
+                    if(!r['datas']['error']){
+                        showDialog(r['datas'],'succ','','','','','','','','',1);
+                        window.location.reload();
+                        return false;
+                    }
+                    showError(r['datas']['error']);
+                });
+        });
+    });
+</script>

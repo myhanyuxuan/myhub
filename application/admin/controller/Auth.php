@@ -144,11 +144,11 @@ class Auth extends Common
                 $data['addtime'] = time();
                 $r = $this->Admin->insertGetId($data);
                 if(!$r){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
                 $gname = $this->Gadmin->where(array('id'=>$post['gid']))->find();
                 if(!$gname){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
                 $insert = array();
                 $insert['aid'] = $r;
@@ -156,7 +156,7 @@ class Auth extends Common
                 $insert['gname'] = $gname['gname'];
                 $a_g = $this->a_g->insert($insert);
                 if(!$a_g){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
 
                 $this->Admin->commit();
@@ -186,14 +186,14 @@ class Auth extends Common
                 }
                 $r = $this->Admin->update($data,array('id'=>$post['admin_id']));
                 if(!$r){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
                 $gname = $this->Gadmin->where(array('id'=>$post['gid']))->find();
                 $data_g['gid'] = $post['gid'];
                 $data_g['gname'] = $gname['gname'];
                 $g = $this->a_g->where(array('aid'=>$post['admin_id']))->update($data_g);
                 if(!$g){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
 
                 $this->Admin->commit();
@@ -214,11 +214,11 @@ class Auth extends Common
                 //删除 不支持批量删除
                 $r = $this->Admin->where(array('id'=>$ids))->delete();
                 if(!$r){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
                 $g = $this->a_g->where(array('aid'=>$ids))->delete();
                 if(!$g){
-                    new Exception('操作失败');
+                    throw new Exception('操作失败');
                 }
 
                 $this->Admin->commit();
@@ -359,10 +359,10 @@ class Auth extends Common
             if(!in_array(request()->action(),$ok_menu)){
                 $this->error('你无访问权限');
             }
-            $curr_url = request()->url(true);
-            Cookie::forever('last_url',$curr_url);
-            Cookie::forever('is_con',request()->controller());
         }
+        $curr_url = request()->url(true);
+        Cookie::forever('last_url',$curr_url);
+        Cookie::forever('is_con',request()->controller());
 
         $this->assign('member_menu',$menu_array);
         $this->assign('menu_key',$menu_key);

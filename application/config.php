@@ -252,4 +252,6 @@ return [
         'length'   => 4,
         'useCurve'=>false
     ],
+    //开启自动写入时间戳字段
+    'auto_timestamp'=>false
 ];
