@@ -1,0 +1,78 @@
+<style>
+    select,input[type="text"]{padding: 4px;width: 100px;}
+</style>
+<div class="page">
+    <div style="position: fixed;width: 100%;z-index: 99;background: #fff;">
+        {include file="layout/top_menu"/}
+        <div class="fixed-empty"></div>
+        <div class="menu2_main">
+            <div class="main tb-type1 menu2" style="background-color: #fff;padding-left: 30px;">
+                <a href="{:url('stock/data_list')}">产品资料</a>
+                <a href="{:url('stock/data_list',['type'=>'kehu'])}">客户资料</a>
+                <a href="{:url('stock/data_list',['type'=>'supplier'])}" class="active">供货商资料</a>
+                <a href="{:url('stock/data_list',['type'=>'attr'])}">产品属性设置</a>
+            </div>
+        </div>
+        <div style="height: 10px !important;"></div>
+    </div>
+    <div class="buy_search" style="margin-top: 107px;">
+        <div class="main tb-type1">
+            <span style="padding-right: 12px;">供货商列表：</span>
+            <a href="javascript:void(0);"  uri="{:url('stock/supplier_add')}" class="btn-adds" nc_type="dialog" dialog_title="新增供货商资料" dialog_id="add_data" dialog_width="500">+新增</a>
+        </div>
+    </div>
+    <table class="table tb-type2 nobdb buy_list">
+        <thead>
+        <tr class="thead">
+            <th width="45"></th>
+            <th>供货商名称</th>
+            <th>地址</th>
+            <th>电话</th>
+            <th>联系人</th>
+            <th>备用电话</th>
+            <th>qq</th>
+            <th>微信</th>
+            <th width="200">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(!$list->isEmpty()){?>
+        <?php foreach($list as $v){?>
+        <tr class="hover">
+            <td><input type="checkbox" name="ids[]" value="{$v.id}"/></td>
+            <td>{$v.supplier_name}</td>
+            <td>{$v.address}</td>
+            <td>{$v.tel_phone}</td>
+            <td>{$v.tel_name}</td>
+            <td>{$v.tel_phone2}</td>
+            <td>{$v.qq}</td>
+            <td>{$v.weixin}</td>
+            <td>
+                <a href="javascript:;" class="btn-adds6" nc_type="dialog"  uri="{:url('stock/supplier_edit',['id'=>$v['id']])}" dialog_title="编辑供货商资料" dialog_id="edit_data" dialog_width="500">编辑</a>
+                <a href="javascript:;" class="btn-adds3"  onclick="dels($(this),1,'/admin/stock/data_list/type/supplier')" ids="{$v.id}">删除</a>
+            </td>
+        </tr>
+        <?php }?>
+        <tr class="c_all">
+            <td colspan="15">
+                <label style="padding: 0;margin: 0;"><input type="checkbox" id="c_All"/><span style="vertical-align: middle;margin-left: 4px;">全选</span></label>
+                <a href="javascript:void(0)" class="btn-adds3" onclick="dels($(this),2,'/admin/stock/data_list/type/supplier')">删除</a>
+            </td>
+        </tr>
+        <?php }else{?>
+        <tr class="no_data">
+            <td colspan="15">暂无记录...</td>
+        </tr>
+        <?php }?>
+        </tbody>
+        <?php if($list->render()){?>
+        <tfoot>
+        <tr class="tfoot">
+            <td colspan="15" id="dataFuncs"><div class="pagination"> {$list->render()}</div></td>
+        </tr>
+        </tfoot>
+        <?php }?>
+    </table>
+</div>
+
+<script type="text/javascript" src="/static/bootstrap/js/dialog.js" id="dialog_js" charset="utf-8"></script>

@@ -4,9 +4,12 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
+use app\admin\model\StockArea;
 use app\admin\model\StockClass;
 use app\admin\model\StockData;
+use app\admin\model\StockKehu;
 use app\admin\model\StockSpec;
+use app\admin\model\StockSupplier;
 use app\admin\model\StockUnit;
 use think\Cookie;
 use think\Db;
@@ -17,6 +20,12 @@ class Stock extends Common
     static $data;
     //产品资料
     protected $stockData;
+    //客户资料
+    protected $stockKehu;
+    //供货商资料
+    protected $stockSupplier;
+    //地区大类
+    protected $stockArea;
     //产品大类
     protected $stockClass;
     //计量单位
@@ -28,6 +37,9 @@ class Stock extends Common
     {
         parent::__construct($request);
         $this->stockData = new StockData();
+        $this->stockKehu = new StockKehu();
+        $this->stockSupplier = new StockSupplier();
+        $this->stockArea = new StockArea();
         $this->stockClass = new StockClass();
         $this->stockSpec = new StockSpec();
         $this->stockUnit = new StockUnit();
@@ -122,6 +134,70 @@ class Stock extends Common
         return $this ->fetch();
     }
 
+    //地区大类
+    public function area_list(Request $request)
+    {
+        $this->view->engine->layout(false);
+        $list = $this->stockArea->listData();
+        $this->assign('list',$list);
+
+        $del_datas =$request->post('del_data');
+        $new_ids =$request->post('new_id/a');
+        $c_ids =$request->post('c_id/a');
+        if($del_datas || $new_ids || $c_ids){
+            $this->stockArea->classBehavior($del_datas,$new_ids,$c_ids);
+        }
+        return $this ->fetch();
+    }
+
+    //客户资料新增
+    public function kehu_add(Request $request){
+        $this->view->engine->layout(false);
+        $area_list = $this->stockArea->listData();//地区大类
+        $this->assign('area_list',$area_list);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockKehu->insertData($data);
+        }
+        return $this ->fetch();
+    }
+
+    //客户资料编辑
+    public function kehu_edit(Request $request){
+        $this->view->engine->layout(false);
+        $area_list = $this->stockArea->listData();//地区大类
+        $this->assign('area_list',$area_list);
+        $info = $this->stockKehu->infoData(array('id'=>$request->param('id')));
+        $this->assign('info',$info);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockKehu->updataData($data);
+        }
+        return $this ->fetch();
+    }
+
+    //供货商资料新增
+    public function supplier_add(Request $request){
+        $this->view->engine->layout(false);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockSupplier->insertData($data);
+        }
+        return $this ->fetch();
+    }
+
+    //供货商资料编辑
+    public function supplier_edit(Request $request){
+        $this->view->engine->layout(false);
+        $info = $this->stockSupplier->infoData(array('id'=>$request->param('id')));
+        $this->assign('info',$info);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockSupplier->updataData($data);
+        }
+        return $this ->fetch();
+    }
+
     //计量单位新增
     public function unit_add(Request $request){
         $this->view->engine->layout(false);
@@ -169,14 +245,16 @@ class Stock extends Common
     public function other_data($type){
         switch($type){
             case 'kehu'://客户资料
-                $list = $this->stocKehu->listData();
+                $list = $this->stockKehu->listData();
                 $this->assign('list',$list);
+                $area_list = $this->stockArea->listData();//地区大类
+                $this->assign('area_list',$area_list);
                 //批量删除
                 if($this->request->get('ids/a')){
-                    $this->stocKehu->deleteData($this->request->get('ids/a'));
+                    $this->stockKehu->deleteData($this->request->get('ids/a'));
                     ajax_data('删除成功');
                 }
-                $url = 'stock/supplier_list';
+                $url = 'stock/kehu_list';
                 break;
             case 'supplier'://供货商资料
                 $list = $this->stockSupplier->listData();
