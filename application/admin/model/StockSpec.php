@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------
-// | 进销存模型--计量单位
+// | 进销存模型--产品规格
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
@@ -64,14 +64,23 @@ class StockSpec extends Model
     public function listData($where = [],$field = '*',$page = 0,$order = 'ctime desc',$group = ''){
         $cache_list = Cache::get(self::$cache_spec);
         if(!$cache_list){
-            $cache_list =Db::table($this->table)->field($field)->where($where)->page($page)->group($group)->order($order)->cache(self::$cache_spec)->select();
+            $list =Db::table($this->table)->field($field)->where($where)->page($page)->group($group)->order($order)->cache(self::$cache_spec)->select();
+            $cache_list = array();
+            foreach($list as $v){
+                $cache_list[$v['id']] = $v;
+            }
             Cache::set(self::$cache_spec,$cache_list);
         }
         return $cache_list;
     }
 
     public function infoData($where = []){
-        return $this->where($where)->find();
+        $list = $this->listData();
+        if(!is_numeric($where['id'])){
+            return NULL;
+        }
+        $info = $list[$where['id']];
+        return $info;
     }
 
     protected function _check($data,$scene){
@@ -87,7 +96,7 @@ class StockSpec extends Model
         }
 
         $where['spec_name'] = $data['spec_name'];
-        $check_name = $this->infoData($where);
+        $check_name = Db::table($this->table)->where($where)->find();
         if(!empty($check_name)){
             throw new Exception('该规格名称已存在');
         }

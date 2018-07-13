@@ -66,14 +66,23 @@ class StockUnit extends Model
     public function listData($where = [],$field = '*',$page = 0,$order = 'ctime desc',$group = ''){
         $cache_list = Cache::get(self::$cache_com);
         if(!$cache_list){
-            $cache_list =Db::table($this->table)->field($field)->where($where)->page($page)->group($group)->order($order)->cache(self::$cache_com)->select();
+            $list =Db::table($this->table)->field($field)->where($where)->page($page)->group($group)->order($order)->cache(self::$cache_com)->select();
+            $cache_list = array();
+            foreach($list as $v){
+                $cache_list[$v['id']] = $v;
+            }
             Cache::set(self::$cache_com,$cache_list);
         }
         return $cache_list;
     }
 
     public function infoData($where = []){
-        return $this->where($where)->find();
+        $list = $this->listData();
+        if(!is_numeric($where['id'])){
+            return NULL;
+        }
+        $info = $list[$where['id']];
+        return $info;
     }
 
     protected function _check($data,$scene){
@@ -89,7 +98,7 @@ class StockUnit extends Model
         }
 
         $where['com_name'] = $data['com_name'];
-        $check_name = $this->infoData($where);
+        $check_name = Db::table($this->table)->where($where)->find();
         if(!empty($check_name)){
             throw new Exception('该单位名称已存在');
         }

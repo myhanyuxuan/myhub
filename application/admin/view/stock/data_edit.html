@@ -6,7 +6,7 @@
         <div class="s-type1">
             <label>
                 <span class="in21">产品大类：</span>
-                <span style="color: red;">{$cate_name}</span>
+                <span style="color: red;text-align: left;">{$info.class_name}</span>
             </label>
         </div>
 
@@ -31,9 +31,9 @@
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">计量单位：</span>
-                <select name="com_id" style="width: 290px;">
+                <select name="unit_id" style="width: 290px;">
                     <?php foreach($attrList as $v){?>
-                    <option value="{$v.id}" <?php if($info['com_id']==$v['id']){?>selected<?php }?>>{$v.com_name}</option>
+                    <option value="{$v.id}" <?php if($info['unit_id']==$v['id']){?>selected<?php }?>>{$v.com_name}</option>
                     <?php }?>
                 </select>
             </label>

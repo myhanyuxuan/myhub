@@ -5,9 +5,9 @@
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">选择大类：</span>
-                <select name="cate_id" style="width: 290px;">
+                <select name="class_id" style="width: 290px;">
                     <?php foreach($cateList as $v){?>
-                    <option value="{$v.id}">{$v.cate_name}</option>
+                    <option value="{$v.id}">{$v.class_name}</option>
                     <?php }?>
                 </select>
             </label>
@@ -34,7 +34,7 @@
         <div class="s-type1">
             <label>
                 <i class="ws_logo"></i><span class="in21">计量单位：</span>
-                <select name="com_id" style="width: 290px;">
+                <select name="unit_id" style="width: 290px;">
                     <?php foreach($attrList as $v){?>
                     <option value="{$v.id}">{$v.com_name}</option>
                     <?php }?>

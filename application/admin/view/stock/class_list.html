@@ -4,7 +4,7 @@
     .label{padding-left: 0;padding-right: 0;cursor: pointer;}
     .ws_kehu label span{text-align: left;vertical-align: middle;padding-left: 0;}
 </style>
-<form id="changeform" method="post" action="{:url('stock/data_cate_edit')}">
+<form id="changeform" method="post" action="{:url('stock/class_list')}">
     <input name="del_data" value="" type="hidden"/>
     <div class="page ws_kehu">
         <div class="footer">
@@ -18,10 +18,10 @@
             </tr>
             </thead>
             <tbody id="g_list">
-            <?php if($cateList){?>
-            <?php foreach($cateList as $v){?>
+            <?php if($list){?>
+            <?php foreach($list as $v){?>
             <tr class="hover">
-                <td><input type="text" name="c_id[{$v.id}]" value="{$v.cate_name}"/></td>
+                <td><input type="text" name="c_id[{$v.id}]" value="{$v.class_name}"/></td>
                 <td><a href="javascript:;" class="btn-adds3 clear_data" id_v="{$v.id}">删除</a></td>
             </tr>
             <?php }?>
