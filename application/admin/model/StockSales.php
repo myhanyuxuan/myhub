@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------
-// | 进销存模型--客户资料
+// | 进销存模型--供货商资料
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
@@ -9,46 +9,44 @@ use think\Db;
 use think\image\Exception;
 use think\Model;
 
-class StockKehu extends Model
+class StockSales extends Model
 {
-    protected $table = 'myhub_stock_kehu';
+    protected $table = 'myhub_stock_sales';
 
     public function insertData($data = []){
-        try{
-            $this->_check($data,'add');
-            $inserData = array();
-            $inserData['kehu_name'] = $data['kehu_name'];
-            $inserData['area_id'] = $data['area_id'];
-            $inserData['address'] = $data['address'];
-            $inserData['tel_phone'] = $data['tel_phone'];
-            $inserData['tel_name'] = $data['tel_name'];
-            if($data['tel_phone2']){
-                $inserData['tel_phone2'] = $data['tel_phone2'];
-            }
-            if($data['qq']){
-                $inserData['qq'] = $data['qq'];
-            }
-            if($data['weixin']){
-                $inserData['weixin'] = $data['weixin'];
-            }
-            $inserData['ctime'] = time();
-            $r = $this->insertGetId($inserData);
-            if(!$r){
-                throw new Exception('添加数据失败');
-            }
+            try{
+                $this->_check($data,'add');
+                $inserData = array();
+                $inserData['sales_name'] = $data['sales_name'];
+                $inserData['address'] = $data['address'];
+                $inserData['tel_phone'] = $data['tel_phone'];
+                $inserData['tel_name'] = $data['tel_name'];
+                if($data['tel_phone2']){
+                    $inserData['tel_phone2'] = $data['tel_phone2'];
+                }
+                if($data['qq']){
+                    $inserData['qq'] = $data['qq'];
+                }
+                if($data['weixin']){
+                    $inserData['weixin'] = $data['weixin'];
+                }
+                $inserData['ctime'] = time();
+                $r = $this->insertGetId($inserData);
+                if(!$r){
+                    throw new Exception('添加数据失败');
+                }
 
-            ajax_data('添加成功');
-        }catch(Exception $e){
-            ajax_error($e->getMessage());
-        }
+                ajax_data('添加成功');
+            }catch(Exception $e){
+                ajax_error($e->getMessage());
+            }
     }
 
     public function updataData($data = []){
         try{
             $this->_check($data,'edit');
             $updateData = array();
-            $updateData['kehu_name'] = $data['kehu_name'];
-            $updateData['area_id'] = $data['area_id'];
+            $updateData['sales_name'] = $data['sales_name'];
             $updateData['address'] = $data['address'];
             $updateData['tel_phone'] = $data['tel_phone'];
             $updateData['tel_name'] = $data['tel_name'];
@@ -89,9 +87,8 @@ class StockKehu extends Model
     }
 
     protected function _check($data,$scene){
-
-        if(empty($data['kehu_name'])){
-            throw new Exception('客户名称不能为空');
+        if(empty($data['sales_name'])){
+            throw new Exception('供货商名称不能为空');
         }
         $where = array();
         if($scene == 'edit'){
@@ -100,16 +97,13 @@ class StockKehu extends Model
             }
             $where['id'] = array('neq',intval($data['id']));
         }
-        $where['kehu_name'] = $data['kehu_name'];
-        $check_name = $this->infoData($where,'kehu_name');
+        $where['sales_name'] = $data['sales_name'];
+        $check_name = $this->infoData($where,'sales_name');
         if(!empty($check_name)){
-            throw new Exception('该客户名称已存在');
-        }
-        if(!is_numeric($data['area_id']) || $data['area_id'] == 0){
-            throw new Exception('请选择客户所在地区');
+            throw new Exception('该供货商名称已存在');
         }
         if(empty($data['address'])){
-            throw new Exception('地址不能为空');
+            throw new Exception('供货商地址不能为空');
         }
         if(empty($data['tel_phone'])){
             throw new Exception('联系电话不能为空');

@@ -8,6 +8,7 @@ use app\admin\model\StockArea;
 use app\admin\model\StockClass;
 use app\admin\model\StockData;
 use app\admin\model\StockKehu;
+use app\admin\model\StockSales;
 use app\admin\model\StockSpec;
 use app\admin\model\StockSupplier;
 use app\admin\model\StockUnit;
@@ -18,6 +19,8 @@ use think\Request;
 class Stock extends Common
 {
     static $data;
+    //销售管理
+    protected $stockSales;
     //产品资料
     protected $stockData;
     //客户资料
@@ -36,6 +39,7 @@ class Stock extends Common
     public function __construct(Request $request)
     {
         parent::__construct($request);
+        $this->stockSales = new StockSales();
         $this->stockData = new StockData();
         $this->stockKehu = new StockKehu();
         $this->stockSupplier = new StockSupplier();
@@ -47,9 +51,10 @@ class Stock extends Common
     /*=============================================================销售管理================================================================*/
     public function sales_list(Request $request)
     {
-
+        $list = $this->stockSales->listData();
+        $this->assign('list',$list);
         $this -> top_menu('sales');
-        return $this ->fetch('stock/sales/sales_list');
+        return $this ->fetch();
     }
     /*=============================================================采购管理================================================================*/
     public function buy_list(Request $request)
