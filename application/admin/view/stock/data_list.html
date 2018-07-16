@@ -21,19 +21,29 @@
                 <li style="width: 60%;"><a href="javascript:void(0);"  uri="{:url('stock/class_list')}" class="btn-adds5" nc_type="dialog" dialog_title="编辑产品大类" dialog_id="list" dialog_width="500">编辑大类</a></li>
             </ul>
             <ul class="tt2">
-                <li onclick="window.location.href='/admin/stock/data_list'" <?php if(!input('cate_id')){?>class="curr"<?php }?>><a href="javascript:void(0);"  class="btn-adds2">全部</a></li>
+                <li onclick="window.location.href='/admin/stock/data_list'" <?php if(!input('c_id')){?>class="curr"<?php }?>><a href="javascript:void(0);"  class="btn-adds2">全部</a></li>
                 <?php foreach($class_list as $v){?>
-                <li onclick="window.location.href='/admin/stock/data_list?cate_id='+'{$v.id}'" <?php if($v['id']==input('cate_id')){?>class="curr"<?php }?>><a href="javascript:void(0);"  class="btn-adds2">{$v.class_name}</a></li>
+                <li onclick="window.location.href='/admin/stock/data_list?c_id='+'{$v.id}'" <?php if($v['id']==input('c_id')){?>class="curr"<?php }?>><a href="javascript:void(0);"  class="btn-adds2">{$v.class_name}</a></li>
                 <?php }?>
             </ul>
         </div>
         <div class="main_right">
+            <form method="get" action="{:url('stock/data_list')}" name="formSearch" id="formSearch">
             <div class="buy_search">
                 <div class="main tb-type1">
                     <span style="padding-right: 12px;">产品资料列表：</span>
                     <a href="javascript:void(0);"  uri="{:url('stock/data_add')}" class="btn-adds" nc_type="dialog" dialog_title="新增产品资料" dialog_id="data_add" dialog_width="500">+新增</a>
+                    <label>
+                        <span class="in21">产品编码:</span><input class="txt" style="width: 100px;" type="text" value="<?php echo input('bid')?>" name="bid"/>
+                    </label>
+                    <label>
+                        <span class="in21">产品名称:</span><input class="txt" style="width: 100px;" type="text" value="<?php echo input('p_name')?>" name="p_name"/>
+                    </label>
+                    <a href="javascript:void(0);" id="ncsubmit" class="btn-adds8" >搜索</a>
+                    <a href="javascript:void(0);" id="rs_ncsubmit"  class="btn-adds4">重置</a>
                 </div>
             </div>
+            </form>
             <table class="table tb-type2 nobdb buy_list" style="margin-top: 56px;">
                 <thead>
                 <tr class="thead">
@@ -82,3 +92,13 @@
 </div>
 
 <script type="text/javascript" src="/static/bootstrap/js/dialog.js" id="dialog_js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#ncsubmit').click(function(){
+            $('#formSearch').submit();
+        });
+        $('#rs_ncsubmit').click(function(){
+            window.location.href = $('#formSearch').attr('action');
+        });
+    })
+</script>

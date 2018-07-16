@@ -79,7 +79,26 @@ class Stock extends Common
         $this->assign('class_list',$class_list);
 
         $list = $this->stockData->listData();
-        $this->assign('list',$list);
+
+        if(input('bid') || input('p_name') || input('c_id')){
+            $list_new = array();
+            foreach($list as $k => $v){
+                if(input('c_id') && $v['class_id'] != input('c_id')){
+                    continue;
+                }
+                if(input('bid') && strpos($v['bid'],input('bid')) === false){
+                    continue;
+                }
+                if(input('p_name') && strpos($v['p_name'],input('p_name')) === false ){
+                    continue;
+                }
+                $list_new[$v['id']] = $v;
+            }
+        }else{
+            $list_new = $list;
+        }
+
+        $this->assign('list',$list_new);
 
         //批量删除
         if($request->get('ids/a')){
@@ -245,7 +264,8 @@ class Stock extends Common
     public function other_data($type){
         switch($type){
             case 'kehu'://客户资料
-                $list = $this->stockKehu->listData();
+                $where = $this->_condition();
+                $list = $this->stockKehu->listData($where);
                 $this->assign('list',$list);
                 $area_list = $this->stockArea->listData();//地区大类
                 $this->assign('area_list',$area_list);
@@ -257,7 +277,8 @@ class Stock extends Common
                 $url = 'stock/kehu_list';
                 break;
             case 'supplier'://供货商资料
-                $list = $this->stockSupplier->listData();
+                $where = $this->_condition();
+                $list = $this->stockSupplier->listData($where);
                 $this->assign('list',$list);
                 //批量删除
                 if($this->request->get('ids/a')){
@@ -291,6 +312,34 @@ class Stock extends Common
                 break;
         }
         return $url;
+    }
+    public function _condition(){
+        $where = array();
+        if(input('area_id')){
+            $where['area_id'] = input('area_id');
+        }
+        if(input('kehu_name')){
+            $where['kehu_name'] = input('kehu_name');
+        }
+        if(input('supplier_name')){
+            $where['supplier_name'] = input('supplier_name');
+        }
+        if(input('address')){
+            $where['address'] = array('like',"%".input('address')."%");
+        }
+        if(input('tel_phone')){
+            $where['tel_phone'] = input('tel_phone');
+        }
+        if(input('tel_name')){
+            $where['tel_name'] = input('tel_name');
+        }
+        if(input('qq')){
+            $where['qq'] = input('qq');
+        }
+        if(input('weixin')){
+            $where['weixin'] = input('weixin');
+        }
+        return $where;
     }
 
     /*顶部导航*/
