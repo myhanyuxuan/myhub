@@ -1,0 +1,141 @@
+<?php
+$now_day = date('Y-m-d',time());
+$now_h = date('H',time());
+$now_i = date('i',time());
+?>
+<link href="admin_public/css/add.css" rel="stylesheet" type="text/css" />
+<style>
+    input[type='checkbox']{width: auto;vertical-align: middle;}
+    .label{padding-left: 0;padding-right: 0;cursor: pointer;}
+    .ws_kehu label span{text-align: left;vertical-align: middle;padding-left: 0;}
+</style>
+<form id="changeform" method="post" action="{:url('stock/sales_add')}">
+    <div class="page ws_kehu">
+        <div class="s-type1">
+            <label>
+                    <i class="ws_logo"></i><span class="in21">选择客户：</span>
+                <select name="area_id" style="width: 290px;">
+                    <?php foreach($kehu_list as $v){?>
+                    <option value="{$v.id}">{$v.kehu_name}</option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+        <div class="s-type1">
+            <label>
+                <i class="ws_logo"></i><span class="in21">出货仓库：</span>
+                <select name="area_id" style="width: 290px;">
+                    <?php foreach($whouse_list as $k => $v){?>
+                    <option value="{$k}">{$v}</option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+
+        <div class="footer">
+            <a href="javascript:void(0);" class="btn-adds cate_add">+新增出货产品</a>
+            <select name="area_id" style="width: 150px;">
+                <option value="">请选择产品大类</option>
+                <?php foreach($kehu_list as $v){?>
+                <option value="{$v.id}">{$v.kehu_name}</option>
+                <?php }?>
+            </select>
+            <select name="area_id" style="width: 150px;">
+                <option value="">请选择产品大类</option>
+                <?php foreach($kehu_list as $v){?>
+                <option value="{$v.id}">{$v.kehu_name}</option>
+                <?php }?>
+            </select>
+        </div>
+        <table class="table tb-type2 nobdb buy_list" style="margin: 0 10px;width: 730px;">
+            <thead>
+            <tr class="thead">
+                <th>产品编码</th>
+                <th>产品名称</th>
+                <th>规格</th>
+                <th>单位</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>金额</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="p_list">
+
+            </tbody>
+        </table>
+        <div style="height: 20px;"></div>
+        <div class="s-type1">
+             <label>
+                 <span class="in21">合计数量：</span>
+                 <span id="total_num">0</span>
+             </label>
+              <label>
+                  <span class="in21">合计金额：</span>
+                 <span style="color: red;" id="total_price">￥0.00</span>
+              </label>
+        </div>
+        <div class="s-type1">
+            <label>
+                <span class="in21">已收金额：</span>
+                <input type="text" id="address" name="address" style="width: 50%;" placeholder="0.00"/>
+            </label>
+            <label style="width: 160px;">
+                <span class="in21">收款账号：</span>
+                <select name="area_id" style="width: 50%;">
+                    <?php foreach($kehu_list as $v){?>
+                    <option value="{$v.id}">{$v.kehu_name}</option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+        <div class="s-type1">
+            <label class="tb-type1">
+                <span class="in21">收款时间：</span>
+                <input class="txt date" type="text" value="<?php echo date('Y-m-d',time());?>" id="pay_time" name="pay_time">
+            </label>
+            <label>
+                <select name="pay_time_h" class="w50" style="width: 50px;">
+                    <?php for($i=0;$i<24;$i++){?>
+                    <option value="<?php echo $i;?>" <?php if($i==$now_h){?>selected="selected" <?php }?>><?php echo $i;?></option>
+                    <?php }?>
+                </select>
+                <select name="pay_time_i" class="w50" style="width: 50px;">
+                    <?php for($i=0;$i<60;$i++){?>
+                    <option value="<?php echo $i;?>" <?php if($i==$now_i){?>selected="selected" <?php }?> ><?php echo $i;?></option>
+                    <?php }?>
+                </select>
+            </label>
+        </div>
+
+        <div class="footer">
+            <a href="JavaScript:void(0);" class="btn-adds6" id="confirm_button" ><span>确定</span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function(){
+        $('#pay_time').datepicker({dateFormat: 'yy-mm-dd'});
+    });
+    $(document).ready(function(){
+        //按钮先执行验证再提交表单
+        $("#confirm_button").click(function(){
+                var url = $('#changeform').attr('action');
+                var params = $('#changeform').serializeArray();
+                var values = {};
+                for(var x in params ){
+                    values[params[x].name] = params[x].value;
+                }
+                var idata = JSON.stringify(values);
+                $.post(url,{params:JSON.parse(idata)},function(result){
+                    var r = eval('('+result+')');
+                    if(!r['datas']['error']){
+                        showDialog(r['datas'],'succ','','','','','','','','',1);
+                        window.location.reload();
+                        return false;
+                    }
+                    showError(r['datas']['error']);
+                });
+        });
+    });
+</script>

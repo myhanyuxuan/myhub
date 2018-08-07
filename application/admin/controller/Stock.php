@@ -21,6 +21,8 @@ class Stock extends Common
     static $data;
     //销售管理
     protected $stockSales;
+    //库存管理
+    protected $stock;
     //产品资料
     protected $stockData;
     //客户资料
@@ -40,6 +42,7 @@ class Stock extends Common
     {
         parent::__construct($request);
         $this->stockSales = new StockSales();
+        $this->stock = new \app\admin\model\Stock();
         $this->stockData = new StockData();
         $this->stockKehu = new StockKehu();
         $this->stockSupplier = new StockSupplier();
@@ -54,6 +57,19 @@ class Stock extends Common
         $list = $this->stockSales->listData();
         $this->assign('list',$list);
         $this -> top_menu('sales');
+        return $this ->fetch();
+    }
+
+    public function sales_add(Request $request){
+        $this->view->engine->layout(false);
+        $data = $request->post('params/a');
+        if(!empty($data)){
+            $this->stockData->insertData($data);
+        }
+        $this->assign('kehu_list',$this->stockKehu->listData());
+        $stock = $this->stock;
+        $this->assign('whouse_list',$stock::$whouse);
+
         return $this ->fetch();
     }
     /*=============================================================采购管理================================================================*/

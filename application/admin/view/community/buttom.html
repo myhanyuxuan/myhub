@@ -1,0 +1,83 @@
+<link href="admin_public/css/shop_data.css" rel="stylesheet" type="text/css" />
+<link href="admin_public/css/community.css" rel="stylesheet" type="text/css" />
+<style>
+    select,input[type="text"]{padding: 4px;width: 100px;}
+</style>
+<div class="page">
+    {include file="layout/top_menu"/}
+    <div class="fixed-empty"></div>
+    <div style="margin: 20px;">位置：<a href="{:url('community/community_list')}">社区中心</a> - <b>前端按钮元素</b></div>
+    <div class="layout">
+        <div class="buttom_op" style="padding: 10px;border: 1px solid #00B492;width: 80%;">
+            <h3 style="font-size: 24px;border-bottom: 1px solid #ccc;margin-bottom: 20px;">主题</h3>
+            <table>
+                <tr style="height: 40px;">
+                    <td>操作按钮：</td>
+                    <td>
+                        <button href="javascript:;" class="btn-adds6">绿色按钮</button>
+                        <button href="javascript:;" class="btn-adds3">警告按钮</button>
+                    </td>
+
+                </tr>
+                <tr style="height: 40px;">
+                    <td>行为按钮：</td>
+                    <td>
+                        <button href="javascript:;" class="btn-adds8">搜索按钮</button>
+                        <button href="javascript:;" class="btn-adds4">重置按钮</button>
+                    </td>
+                    <td>
+                        <button href="javascript:;" class="btn-adds7">灰色按钮</button>
+                    </td>
+                </tr>
+            </table>
+            <table class="table buy_list" style="width: 80%;">
+                <thead>
+                <tr class="thead">
+                    <th>名称</th>
+                    <th>组合</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="color: #000;">
+                    <td>编辑</td>
+                    <td>class="btn-adds6"</td>
+                    <td><a href="">样式查看</a></td>
+                </tr>
+                <tr style="color: #000;">
+                    <td>删除</td>
+                    <td>class="btn-adds3"</td>
+                    <td><a href="">样式查看</a></td>
+                </tr>
+                <tr style="color: #000;">
+                    <td>搜索</td>
+                    <td>class="btn-adds8"</td>
+                    <td><a href="">样式查看</a></td>
+                </tr>
+                <tr style="color: #000;">
+                    <td>重置</td>
+                    <td>class="btn-adds4"</td>
+                    <td><a href="">样式查看</a></td>
+                </tr>
+                <tr style="color: #000;">
+                    <td>标记</td>
+                    <td>class="btn-adds7"</td>
+                    <td><a href="">样式查看</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/bootstrap/js/dialog.js" id="dialog_js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#ncsubmit').click(function(){
+            $('#formSearch').submit();
+        });
+        $('#rs_ncsubmit').click(function(){
+            window.location.href = $('#formSearch').attr('action');
+        });
+    })
+</script>
